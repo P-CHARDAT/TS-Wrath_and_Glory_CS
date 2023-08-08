@@ -70,7 +70,7 @@ function initSheet() {
 
 function onInputChange(input) {
     //handles input changes to store them in local storage
-    console.log("changes here")
+    console.log("changes here : " + input)
     let data;
     // get already stored data
     TS.localStorage.campaign.getBlob().then((storedData) => {
@@ -144,7 +144,7 @@ function parseActions(text) {
         console.log("result : " + result)
         let action = {
             title: result[1],
-            range: result[2], 
+            range: result[2],
             dice: result[3],
             ap: result[4],
             salvo: result[5],
@@ -155,6 +155,7 @@ function parseActions(text) {
     console.log("actions : " + JSON.stringify(actions))
     return actions;
 }
+
 function addActions(results) {
     //remove old actions
     let oldActions = document.querySelectorAll("[id^=list-action]");
@@ -192,6 +193,7 @@ function addActions(results) {
         let button = clonedAction.querySelector("[id=abilities-template-button]");
         button.id = "action-button" + i;
         button.dataset.diceType = results[i]["dice"];
+        console.log(button.dataset.diceType)
         button.dataset.label = results[i]["title"];
         button.addEventListener("click", function () {
             TS.dice.putDiceInTray([createDiceRoll(button, null)]);
@@ -312,6 +314,16 @@ function onStateChangeEvent(msg) {
 //     }
 // }
 
+
+function hideShow(select) {
+console.log(select)
+    const x = select;
+    if (x.style.display === "none") {
+        x.style.display = "flex";
+    } else {
+        x.style.display = "none";
+    }
+}
 
 function changeBody(registers, bodies, activeRegister) {
     Array.from(registers.children).forEach((el, i) => {

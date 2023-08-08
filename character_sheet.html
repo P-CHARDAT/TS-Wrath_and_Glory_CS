@@ -52,7 +52,7 @@
                 <tbody>
                     <tr>
                         <td>
-                            <label class="field-title" data-dice-type="1d6" data-modifier="no-mod"
+                            <label for="str-enhanced" class="field-title" data-dice-type="" data-modifier="no-mod"
                                 data-label="Strength">Strength</label>
                         </td>
                         <td class="input-bg">
@@ -566,7 +566,7 @@
 
 
     <div class="tabs">
-        <div class="tab-registers">
+        <div class="tab-registers notes">
             <button id="weapon-tab" class="tab active-tab">Weapons</button>
             <button id="wargear-tab" class="tab">Wargear</button>
             <button id="abilities-tab" class="tab">Abilities</button>
@@ -598,7 +598,8 @@
                     <template id="abilities-template">
                         <tr>
                             <td style="width:29%">
-                                <label id="abilities-template-title" class="ability-title weapon-size">Action Title</label>
+                                <label id="abilities-template-title" class="ability-title weapon-size">Action
+                                    Title</label>
                             </td>
                             <td style="width:14%">
                                 <div id="abilities-template-range" class="ability-desc weapon-size">Range</div>
@@ -615,14 +616,17 @@
                                 <div id="abilities-template-salvo" class="ability-desc weapon-size">Salvo</div>
                             </td>
                             <td style="width:24%">
-                                <p id="abilities-template-traits" class="ability-desc weapon-size">Action description</p>
+                                <p id="abilities-template-traits" class="ability-desc weapon-size">Action description
+                                </p>
                             </td>
                         </tr>
                     </template>
 
-                    <div class="content-row">
+
+                    <div id="arsenal" class="content-row" style="margin-bottom: 0;">
                         <textarea id="abilities-text" aria-labelledby="abilities-section"></textarea>
                     </div>
+                    <button onclick="hideShow(arsenal)" class="notes">Arsenal</button>
                 </div>
 
 
@@ -632,16 +636,35 @@
                     <input id="ammo-2" type="checkbox" />
                     <input id="ammo-3" type="checkbox" />
                 </container>
+
                 <textarea id="weapon-traits" class="notes" placeholder="Weapons Traits Description"></textarea>
             </div>
             <div style="display:none;">
-                <textarea id="wargear" class="notes"></textarea>
+                <textarea id="wargear" class="notes" style="margin-top: 0;"></textarea>
             </div>
             <div style="display:none;">
-                <textarea id="abilities" class="notes"></textarea>
+                <h2>Species</h2>
+                <textarea id="species" class="notes" style="margin-top: 0;" placeholder="No abilities? Human eh?"></textarea>
+                <h2>Archetype</h2>
+                <textarea id="archetype" class="notes" style="margin-top: 0;"></textarea>
+                <h2>Ascension</h2>
+                <textarea id="ascension" class="notes" style="margin-top: 0;"></textarea>
+                <h2>Talents</h2>
+                <textarea id="talents" class="notes" style="margin-top: 0;"></textarea>
+                <h2>Others</h2>
+                <textarea id="others" class="notes" style="margin-top: 0;"></textarea>
             </div>
             <div style="display:none;">
-                <textarea id="description" class="notes"></textarea>
+                <h2>Objectives</h2>
+                <textarea id="objectives" class="notes" style="margin-top: 0;"></textarea>
+                <h2>Languages</h2>
+                <textarea id="languages" class="notes" style="margin-top: 0;"></textarea>
+                <h2>Keywords</h2>
+                <textarea id="keywords" class="notes" style="margin-top: 0;"></textarea>
+                <h2>Background</h2>
+                <textarea id="background" class="notes" style="margin-top: 0;"></textarea>
+                <h2>Notes</h2>
+                <textarea id="notes" class="notes" style="margin-top: 0;"></textarea>
             </div>
         </div>
     </div>

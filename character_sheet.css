@@ -33,7 +33,7 @@ tfoot {
 
 .notes {
     width: 100%;
-    margin-top: 5px;
+    margin: 1em 0;
 }
 
 h1 {
@@ -142,6 +142,10 @@ p {
     /* align-items: center */
 }
 
+#arsenal {
+    margin-top: 1em;
+}
+
 .tab-registers {
     width: 100%;
     display: flex;
@@ -201,7 +205,6 @@ input {
     border: 2px solid var(--ts-accessibility-border);
     border-radius: 4px;
     font-size: 1.2em;
-
     transition: ease-in-out 0.1s;
 }
 .input-bg {

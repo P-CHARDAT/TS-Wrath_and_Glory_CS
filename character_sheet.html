@@ -31,9 +31,7 @@
 
     <!-- CHARACTER STATS -->
     <div class="stats">
-        <!-- Includes our pages to show our stats contents -->
         <div class="container columns one">
-            <!-- <div w3-include-html="attributes.html"></div> -->
             <!-- ATTRIBUTES -->
             <table class="table">
                 <thead>
@@ -52,18 +50,15 @@
                 <tbody>
                     <tr>
                         <td>
-                            <label for="str-enhanced" class="field-title" data-dice-type="" data-modifier="no-mod"
-                                data-label="Strength">Strength</label>
+                            <label class="field-title" data-dice-type="1d6" data-modifier="no-mod"
+                                data-label="strength">Strength</label>
                         </td>
                         <td class="input-bg">
                             <input id="str" type="number" class="field-data-short"></input>
                         </td>
                         <td class="input-bg">
-                            <input id="str-enhanced" type="number" class="field-data-short"></input>
+                            <input id="strEnhanced" type="number" class="field-data-short"></input>
                         </td>
-                        <!-- <td>
-                                <textarea id="str-notes" class="notes"></textarea>
-                            </td> -->
                     </tr>
                     <tr>
                         <td>
@@ -76,9 +71,6 @@
                         <td class="input-bg">
                             <input id="tou-enhanced" type="number" class="field-data-short"></input>
                         </td>
-                        <!-- <td>
-                                <textarea id="tou-notes" class="notes"></textarea>
-                            </td> -->
                     </tr>
                     <tr>
                         <td>
@@ -143,7 +135,6 @@
                 </tbody>
             </table>
             <!-- TRAITS -->
-            <!-- <div w3-include-html="traits.html"></div> -->
             <table class="table">
                 <thead>
                     <tr>
@@ -272,7 +263,6 @@
         </div>
         <div class="container columns two">
             <!-- SKILLS -->
-            <!-- <div w3-include-html="skills.html"></div> -->
             <table class="table">
                 <thead>
                     <tr>
@@ -285,14 +275,12 @@
                         <th colspan="1">Rating</th>
                         <th colspan="1">Att</th>
                         <th colspan="1">Total</th>
-                        <!-- <th colspan="1">Notes</th> -->
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>
-                            <label class="field-title" data-dice-type="1d6" data-modifier="no-mod"
-                                data-label="Athletics">Athletics</label>
+                            <button class="cell-data" id="ath-roll" type="button" onclick="roll(athTotal)">Athletics</button>
                         </td>
                         <td class="input-bg">
                             <input id="ath" type="number" class="field-data-short"></input>
@@ -301,13 +289,12 @@
                             <p id="ath-att">Str</p>
                         </td>
                         <td class="input-bg">
-                            <input id="ath-total" type="number" class="field-data-short"></input>
+                            <input id="athTotal" type="number" class="field-data-short"></input>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <label class="field-title" data-dice-type="1d6" data-modifier="no-mod"
-                                data-label="Awareness">Awareness</label>
+                            <button class="cell-data" id="awa-roll" type="button" onclick="roll(awaTotal)">Awareness</button>
                         </td>
                         <td class="input-bg">
                             <input id="awa" type="number" class="field-data-short"></input>
@@ -316,13 +303,12 @@
                             <p id="awa-att">Int</p>
                         </td>
                         <td class="input-bg">
-                            <input id="awa-total" type="number" class="field-data-short"></input>
+                            <input id="awaTotal" type="number" class="field-data-short"></input>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <label class="field-title" data-dice-type="1d6" data-modifier="no-mod"
-                                data-label="Ballistic-Skill">Ballistic Skill</label>
+                            <button class="cell-data" id="bs-roll" type="button" onclick="roll(bsTotal)">Ballistic Skill</button>
                         </td>
                         <td class="input-bg">
                             <input id="bs" type="number" class="field-data-short"></input>
@@ -331,13 +317,12 @@
                             <p id="bs-att">Agi</p>
                         </td>
                         <td class="input-bg">
-                            <input id="bs-total" type="number" class="field-data-short"></input>
+                            <input id="bsTotal" type="number" class="field-data-short"></input>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <label class="field-title" data-dice-type="1d6" data-modifier="no-mod"
-                                data-label="Cunning">Cunning</label>
+                            <button class="cell-data" id="cun-roll" type="button" onclick="roll(cunTotal)">Cunning</button>
                         </td>
                         <td class="input-bg">
                             <input id="cun" type="number" class="field-data-short"></input>
@@ -346,13 +331,12 @@
                             <p id="cun-att">Fel</p>
                         </td>
                         <td class="input-bg">
-                            <input id="cun-total" type="number" class="field-data-short"></input>
+                            <input id="cunTotal" type="number" class="field-data-short"></input>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <label class="field-title" data-dice-type="1d6" data-modifier="no-mod"
-                                data-label="Deception">Deception</label>
+                            <button class="cell-data" id="dec-roll" type="button" onclick="roll(decTotal)">Deception</button>
                         </td>
                         <td class="input-bg">
                             <input id="dec" type="number" class="field-data-short"></input>
@@ -361,13 +345,12 @@
                             <p id="dec-att">Fel</p>
                         </td>
                         <td class="input-bg">
-                            <input id="dec-total" type="number" class="field-data-short"></input>
+                            <input id="decTotal" type="number" class="field-data-short"></input>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <label class="field-title" data-dice-type="1d6" data-modifier="no-mod"
-                                data-label="Insight">Insight</label>
+                            <button class="cell-data" id="ins-roll" type="button" onclick="roll(insTotal)">Insight</button>
                         </td>
                         <td class="input-bg">
                             <input id="ins" type="number" class="field-data-short"></input>
@@ -376,28 +359,26 @@
                             <p id="ins-att">Fel</p>
                         </td>
                         <td class="input-bg">
-                            <input id="ins-total" type="number" class="field-data-short"></input>
+                            <input id="insTotal" type="number" class="field-data-short"></input>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <label class="field-title" data-dice-type="1d6" data-modifier="no-mod"
-                                data-label="Intimidation">Intimidation</label>
+                            <button class="cell-data" id="inti-roll" type="button" onclick="roll(intiTotal)">Intimidation</button>
                         </td>
                         <td class="input-bg">
                             <input id="int" type="number" class="field-data-short"></input>
                         </td>
                         <td>
-                            <p id="int-att">Wil</p>
+                            <p id="inti-att">Wil</p>
                         </td>
                         <td class="input-bg">
-                            <input id="int-total" type="number" class="field-data-short"></input>
+                            <input id="intiTotal" type="number" class="field-data-short"></input>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <label class="field-title" data-dice-type="1d6" data-modifier="no-mod"
-                                data-label="Investigation">Investigation</label>
+                            <button class="cell-data" id="inv-roll" type="button" onclick="roll(invTotal)">Investigation</button>
                         </td>
                         <td class="input-bg">
                             <input id="inv" type="number" class="field-data-short"></input>
@@ -406,13 +387,12 @@
                             <p id="inv-att">Int</p>
                         </td>
                         <td class="input-bg">
-                            <input id="inv-total" type="number" class="field-data-short"></input>
+                            <input id="invTotal" type="number" class="field-data-short"></input>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <label class="field-title" data-dice-type="1d6" data-modifier="no-mod"
-                                data-label="Leadership">Leadership</label>
+                            <button class="cell-data" id="lea-roll" type="button" onclick="roll(leaTotal)">Leadership</button>
                         </td>
                         <td class="input-bg">
                             <input id="lea" type="number" class="field-data-short"></input>
@@ -421,13 +401,12 @@
                             <p id="lea-att">Wil</p>
                         </td>
                         <td class="input-bg">
-                            <input id="lea-total" type="number" class="field-data-short"></input>
+                            <input id="leaTotal" type="number" class="field-data-short"></input>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <label class="field-title" data-dice-type="1d6" data-modifier="no-mod"
-                                data-label="Medicae">Medicae</label>
+                            <button class="cell-data" id="med-roll" type="button" onclick="roll(medTotal)">Medicae</button>
                         </td>
                         <td class="input-bg">
                             <input id="med" type="number" class="field-data-short"></input>
@@ -436,13 +415,12 @@
                             <p id="med-att">Int</p>
                         </td>
                         <td class="input-bg">
-                            <input id="med-total" type="number" class="field-data-short"></input>
+                            <input id="medTotal" type="number" class="field-data-short"></input>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <label class="field-title" data-dice-type="1d6" data-modifier="no-mod"
-                                data-label="Persuasion">Persuasion</label>
+                            <button class="cell-data" id="per-roll" type="button" onclick="roll(perTotal)">Persuasion</button>
                         </td>
                         <td class="input-bg">
                             <input id="per" type="number" class="field-data-short"></input>
@@ -451,13 +429,12 @@
                             <p id="per-att">Fel</p>
                         </td>
                         <td class="input-bg">
-                            <input id="per-total" type="number" class="field-data-short"></input>
+                            <input id="perTotal" type="number" class="field-data-short"></input>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <label class="field-title" data-dice-type="1d6" data-modifier="no-mod"
-                                data-label="Pilot">Pilot</label>
+                            <button class="cell-data" id="pil-roll" type="button" onclick="roll(pilTotal)">Pilot</button>
                         </td>
                         <td class="input-bg">
                             <input id="pil" type="number" class="field-data-short"></input>
@@ -466,13 +443,12 @@
                             <p id="pil-att">Agi</p>
                         </td>
                         <td class="input-bg">
-                            <input id="pil-total" type="number" class="field-data-short"></input>
+                            <input id="pilTotal" type="number" class="field-data-short"></input>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <label class="field-title" data-dice-type="1d6" data-modifier="no-mod"
-                                data-label="Psychic-Mastery">Psychic Mastery</label>
+                            <button class="cell-data" id="pm-roll" type="button" onclick="roll(pmTotal)">Psychic Mastery</button>
                         </td>
                         <td class="input-bg">
                             <input id="pm" type="number" class="field-data-short"></input>
@@ -481,13 +457,12 @@
                             <p id="pm-att">Wil</p>
                         </td>
                         <td class="input-bg">
-                            <input id="pm-total" type="number" class="field-data-short"></input>
+                            <input id="pmTotal" type="number" class="field-data-short"></input>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <label class="field-title" data-dice-type="1d6" data-modifier="no-mod"
-                                data-label="Scholar">Scholar</label>
+                            <button class="cell-data" id="sch-roll" type="button" onclick="roll(schTotal)">Scholar</button>
                         </td>
                         <td class="input-bg">
                             <input id="sch" type="number" class="field-data-short"></input>
@@ -496,13 +471,12 @@
                             <p id="sch-att">Int</p>
                         </td>
                         <td class="input-bg">
-                            <input id="sch-total" type="number" class="field-data-short"></input>
+                            <input id="schTotal" type="number" class="field-data-short"></input>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <label class="field-title" data-dice-type="1d6" data-modifier="no-mod"
-                                data-label="Stealth">Stealth</label>
+                            <button class="cell-data" id="ste-roll" type="button" onclick="roll(steTotal)">Stealth</button>
                         </td>
                         <td class="input-bg">
                             <input id="ste" type="number" class="field-data-short"></input>
@@ -511,13 +485,12 @@
                             <p id="ste-att">Agi</p>
                         </td>
                         <td class="input-bg">
-                            <input id="ste-total" type="number" class="field-data-short"></input>
+                            <input id="steTotal" type="number" class="field-data-short"></input>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <label class="field-title" data-dice-type="1d6" data-modifier="no-mod"
-                                data-label="Survival">Survival</label>
+                            <button class="cell-data" id="sur-roll" type="button" onclick="roll(surTotal)">Survival</button>
                         </td>
                         <td class="input-bg">
                             <input id="sur" type="number" class="field-data-short"></input>
@@ -526,13 +499,12 @@
                             <p id="sur-att">Wil</p>
                         </td>
                         <td class="input-bg">
-                            <input id="sur-total" type="number" class="field-data-short"></input>
+                            <input id="surTotal" type="number" class="field-data-short"></input>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <label class="field-title" data-dice-type="1d6" data-modifier="no-mod"
-                                data-label="Tech">Tech</label>
+                            <button class="cell-data" id="tec-roll" type="button" onclick="roll(tecTotal)">Tech</button>
                         </td>
                         <td class="input-bg">
                             <input id="tec" type="number" class="field-data-short"></input>
@@ -541,13 +513,12 @@
                             <p id="tec-att">Int</p>
                         </td>
                         <td class="input-bg">
-                            <input id="tec-total" type="number" class="field-data-short"></input>
+                            <input id="tecTotal" type="number" class="field-data-short"></input>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <label class="field-title" data-dice-type="1d6" data-modifier="no-mod"
-                                data-label="Weapon-Skill">Weapon Skill</label>
+                            <button class="cell-data" id="ws-roll" type="button" onclick="roll(wsTotal)">Weapon Skill</button>
                         </td>
                         <td class="input-bg">
                             <input id="ws" type="number" class="field-data-short"></input>
@@ -556,7 +527,7 @@
                             <p id="ws-att">Ini</p>
                         </td>
                         <td class="input-bg">
-                            <input id="ws-total" type="number" class="field-data-short"></input>
+                            <input id="wsTotal" type="number" class="field-data-short"></input>
                         </td>
                     </tr>
                 </tbody>
@@ -574,12 +545,6 @@
         </div>
         <div class="tab-bodies">
             <div style="display:block;">
-
-
-                <!-- <h1 id="abilities-section">Abilities, Skills, Weapons</h1> -->
-
-
-
                 <table class="table">
                     <thead>
                         <tr>
@@ -623,7 +588,7 @@
                     </template>
 
 
-                    <div id="arsenal" class="content-row" style="margin-bottom: 0;">
+                    <div id="arsenal" class="content-row" style="margin-bottom: 0; display:none;">
                         <textarea id="abilities-text" aria-labelledby="abilities-section"></textarea>
                     </div>
                     <button onclick="hideShow(arsenal)" class="notes">Arsenal</button>
@@ -644,7 +609,8 @@
             </div>
             <div style="display:none;">
                 <h2>Species</h2>
-                <textarea id="species" class="notes" style="margin-top: 0;" placeholder="No abilities? Human eh?"></textarea>
+                <textarea id="species" class="notes" style="margin-top: 0;"
+                    placeholder="No abilities? Human eh?"></textarea>
                 <h2>Archetype</h2>
                 <textarea id="archetype" class="notes" style="margin-top: 0;"></textarea>
                 <h2>Ascension</h2>

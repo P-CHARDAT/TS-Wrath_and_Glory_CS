@@ -6,7 +6,7 @@
   "version": "0.0.1",
   "license": "MIT",
   "about": {
-    "authors": ["Carduus"]
+    "authors": ["Pierre CHARDAT"]
   },
   "kind": "webView",
   "entryPoint": "/character_sheet.html",

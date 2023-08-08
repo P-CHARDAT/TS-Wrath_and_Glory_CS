@@ -1,10 +1,32 @@
+// Init tracked things
 var clearStorageButton = undefined;
+let me = '';
+const numDiceField = 4
+let trackedIds = {};
+let allResults = [];
 
+// Init counts
+let countIcon = 0;
+let countExalted = 0;
+let countCrit = 0;
+let countComplication = 0;
+let totalSuccesses = 0;
+
+// Other
+let crit = "";
+let compl = "";
+let color = `<color="white">`
+
+
+// Take the name of the player 
+async function findMe() {
+    me = await TS.players.whoAmI().then(result => result.name);
+}
 
 function initSheet() {
     let inputs = document.querySelectorAll("input,button,textarea");
 
-    // code initial
+    // I didn't touch this for potential use later on
     for (let input of inputs) {
         if (input.id != undefined && input.id != "clear-storage") {
             input.addEventListener("change", function () {
@@ -70,7 +92,6 @@ function initSheet() {
 
 function onInputChange(input) {
     //handles input changes to store them in local storage
-    console.log("changes here : " + input)
     let data;
     // get already stored data
     TS.localStorage.campaign.getBlob().then((storedData) => {
@@ -141,7 +162,6 @@ function parseActions(text) {
     let results = text.matchAll(/(.*);(melee|(?:(?:\d{1,2}) (?:\d{1,2}) (?:\d{1,2})));((?:\d{0,2}d\d{1,2}[+-]?\d*)+);(-|(?:[0-9]{1}));(-|(?:[0-9]{1}));?(.*)/gi);
     let actions = [];
     for (let result of results) {
-        console.log("result : " + result)
         let action = {
             title: result[1],
             range: result[2],
@@ -152,7 +172,6 @@ function parseActions(text) {
         }
         actions.push(action);
     }
-    console.log("actions : " + JSON.stringify(actions))
     return actions;
 }
 
@@ -168,7 +187,6 @@ function addActions(results) {
     let container = template.parentElement;
     for (let i = 0; i < results.length; i++) {
         let clonedAction = template.content.firstElementChild.cloneNode(true);
-        console.log("clonedAction : " + clonedAction)
         clonedAction.id = "list-action" + i;
         let title = clonedAction.querySelector("[id=abilities-template-title]");
         title.removeAttribute("id");
@@ -193,10 +211,22 @@ function addActions(results) {
         let button = clonedAction.querySelector("[id=abilities-template-button]");
         button.id = "action-button" + i;
         button.dataset.diceType = results[i]["dice"];
-        console.log(button.dataset.diceType)
         button.dataset.label = results[i]["title"];
         button.addEventListener("click", function () {
-            TS.dice.putDiceInTray([createDiceRoll(button, null)]);
+            countIcon = 0;
+            countExalted = 0;
+            countCrit = 0;
+            countComplication = 0;
+            TS.symbiote.sendNotification(me, rolledMessage(button.dataset.diceType, true));
+            TS.dice.putDiceInTray([createDiceRoll(button, null)]).then((rollId) => {
+                // The dice roll has been initiated. Store the ID in our TrackedIds
+                if (true) console.log("Roll initiated. Roll ID:", rollId);
+                trackedIds[rollId] = 1
+            })
+                .catch((error) => {
+                    // Something went wrong initiating the dice roll.
+                    console.error("Error initiating roll:", error);
+                });
             //we are not checking for success or failure here, but could easily by adding a .then (success) and .catch (failure)
         });
 
@@ -279,44 +309,38 @@ function onStateChangeEvent(msg) {
     if (msg.kind === "hasInitialized") {
         //the TS Symbiote API has initialized and we can begin the setup. think of this as "init".
         clearStorageButton = document.getElementById("clear-storage");
-        // includeHTML();
         loadStoredData();
         initSheet();
+        findMe();
     }
 }
 
-// Pour intégrer les onglets html
-// function includeHTML() {
-//     var z, i, elmnt, file, xhttp;
-//     /* Loop through a collection of all HTML elements: */
-//     z = document.getElementsByTagName("*");
-//     for (i = 0; i < z.length; i++) {
-//         elmnt = z[i];
-//         /*search for elements with a certain attribute:*/
-//         file = elmnt.getAttribute("w3-include-html");
-//         if (file) {
-//             /* Make an HTTP request using the attribute value as the file name: */
-//             xhttp = new XMLHttpRequest();
-//             xhttp.onreadystatechange = function () {
-//                 if (this.readyState == 4) {
-//                     if (this.status == 200) { elmnt.innerHTML = this.responseText; }
-//                     if (this.status == 404) { elmnt.innerHTML = "Page not found."; }
-//                     /* Remove the attribute, and call this function once more: */
-//                     elmnt.removeAttribute("w3-include-html");
-//                     includeHTML();
-//                 }
-//             }
-//             xhttp.open("GET", file, true);
-//             xhttp.send();
-//             /* Exit the function: */
-//             return;
-//         }
-//     }
-// }
+function roll(input) {
+    countIcon = 0;
+    countExalted = 0;
+    countCrit = 0;
+    countComplication = 0;
+
+    console.log("input here : " + input.value)
+    const numDice = input.value;
+    const rollDesc = numDice + 'd6';
+    console.log("rolldesc : " + rollDesc)
+    TS.symbiote.sendNotification(me, rolledMessage(numDice));
+
+    TS.dice.putDiceInTray([{ name: "myroll", roll: rollDesc }], null)
+        .then((rollId) => {
+            // The dice roll has been initiated. Store the ID in our TrackedIds
+            if (true) console.log("Roll initiated. Roll ID:", rollId);
+            trackedIds[rollId] = 1
+        })
+        .catch((error) => {
+            // Something went wrong initiating the dice roll.
+            console.error("Error initiating roll:", error);
+        });
+}
 
 
 function hideShow(select) {
-console.log(select)
     const x = select;
     if (x.style.display === "none") {
         x.style.display = "flex";
@@ -333,4 +357,115 @@ function changeBody(registers, bodies, activeRegister) {
 
         el.setAttribute('aria-expanded', el == activeRegister ? 'true' : 'false')
     })
+}
+
+// Gets the message together when you start a roll
+function rolledMessage(numDice, weapon) {
+
+    if (me === '') findMe();
+
+    let message = '<color="orange"><size=120%><align="center">';
+
+    if (weapon) {
+        message += `<color="white"><size=100%><align="left">\n<color="white">I'm rolling <color="green">${numDice}<color="white">`;
+
+    } else {
+        message += `<color="white"><size=100%><align="left">\n<color="white">I'm rolling <color="green">${numDice}d6<color="white">`;
+
+    }
+
+    return message;
+}
+
+
+// TaleSpire will call this after a die roll because of our manifest
+// Takes a look at the roll and handles it if it's one we made
+async function handleRollResult(rollEvent) {
+    if (trackedIds[rollEvent.payload.rollId] == undefined) {
+        // If we haven't tracked that roll, ignore it because it's not from us
+        return;
+    }
+
+    if (true) console.log("roll event", rollEvent);
+
+    // Get the results groups from the roll event
+    const resultsGroups = rollEvent.payload.resultsGroups;
+
+    // Process each results group
+    for (let group of resultsGroups) {
+        // Get the roll results from the group
+        const results = group.result.results;
+
+        // Add the results to allResults
+        allResults = allResults.concat(results);
+    }
+
+    // After processing the roll event, remove its rollId from trackedIds
+    delete trackedIds[rollEvent.payload.rollId];
+
+    // Only update the HTML after all rolls are done
+    if (Object.values(trackedIds).every(value => value === 1)) {
+        const targetValue = 4
+
+        // Now update the results
+        updateResults(allResults, targetValue, true);
+        allResults = [];
+    }
+}
+
+
+function updateResults(results, targetValue, sendChatMessage) {
+
+    let processedResults = results;
+
+    // Process each result
+    for (let i = 0; i < processedResults.length; i++) {
+        let result = results[i];
+        console.log("result of i : " + result)
+        // If it's first dice = wrath dice, update the corresponding counters
+        if (i === 0) {
+            if (result === 6) {
+                countCrit++;
+                countExalted++;
+            } else if (result === 1) {
+                countComplication++;
+            } else if (result >= targetValue && result !== 6) {
+                countIcon++;
+            }
+        } else {
+            // If result is a natural 1 or 6, update the corresponding counters
+            if (result === 6) {
+                countExalted++;
+            } else if (result >= targetValue && result !== 6) {
+                countIcon++;
+            }
+        }
+    }
+
+    if (sendChatMessage) {
+        TS.symbiote.sendNotification(me, resultsMessage());
+    }
+
+}
+
+// Makes the message for the Total Results table
+function resultsMessage() {
+    totalSuccesses = countIcon + 2 * countExalted
+    if (countCrit != 0) {
+        crit = "yes";
+        color = `<color="red">`;
+    } else crit = "no"
+    if(countComplication != 0){
+        compl = "yes";
+        color = `<color="red">`;
+    } else compl = "no"
+    return `<size=120%><color="orange">Results<size=100%><color="white">
+    <b>Icons :</b>  ${countIcon}
+    <b>Exalted Icons :</b>  ${countExalted}
+    <b>Total successes :</b> ${totalSuccesses}
+    \n<color="orange"><b>WRATH DICE</b><color="white">
+    <b>Complications :</b>${color}  ${compl}<color="white">
+    <b>Critical Wrath :</b>${color}  ${crit}<color="white">
+`;
+
 }

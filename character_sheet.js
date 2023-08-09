@@ -1,11 +1,11 @@
 // Init tracked things
 var clearStorageButton = undefined;
 let me = '';
-const numDiceField = 4
+const targetValue = 4
 let trackedIds = {};
 let allResults = [];
 let wrath = document.getElementById("wrath");
-let debug = true;
+let debug = false;
 
 // Init counts
 let countIcon = 0;
@@ -13,6 +13,8 @@ let countExalted = 0;
 let countCrit = 0;
 let countComplication = 0;
 let totalSuccesses = 0;
+let damage = 0;
+
 
 // Other
 let crit = "";
@@ -60,7 +62,7 @@ function initSheet() {
                 titleSibling.classList.add("interactible-title");
                 titleSibling.style.cursor = "pointer";
                 titleSibling.addEventListener("click", function () {
-                    TS.dice.putDiceInTray([createDiceRoll(titleSibling, finalInput)]);
+                    TS.dice.putDiceInTray([createDiceRoll(titleSibling, finalInput)])
                     //we are not checking for success or failure here, but could easily by adding a .then (success) and .catch (failure)
                 });
                 input.setAttribute("aria-labelledby", titleSibling.id);
@@ -97,6 +99,25 @@ function initSheet() {
 
 }
 
+function hideShow(select) {
+    const container = select;
+    if (container.style.display === "none") {
+        container.style.display = "flex";
+    } else {
+        container.style.display = "none";
+    }
+}
+
+function changeBody(registers, bodies, activeRegister) {
+    Array.from(registers.children).forEach((el, i) => {
+        if (bodies.children[i]) {
+            bodies.children[i].style.display = el == activeRegister ? 'block' : 'none'
+        }
+
+        el.setAttribute('aria-expanded', el == activeRegister ? 'true' : 'false')
+    })
+}
+
 //handles input changes to store them in local storage
 function onInputChange(input) {
     let data;
@@ -105,7 +126,7 @@ function onInputChange(input) {
         //parse stored blob as json, but also handle if it's empty by
         //defaulting to an empty json document "{}" if stored data is false
         data = JSON.parse(storedData || "{}");
-        console.log("data " + JSON.stringify(data))
+        if (debug) console.log("data " + JSON.stringify(data))
         if (input.type == "checkbox") {
             data[input.id] = input.checked ? "on" : "off";
         } else {
@@ -178,9 +199,10 @@ function roll(clickedEl, inputEl) {
     countExalted = 0;
     countCrit = 0;
     countComplication = 0;
-    console.log("HERE " + clickedEl.innerHTML)
+
     const numDice = inputEl.value;
     const rollDesc = numDice + 'd6';
+
     TS.symbiote.sendNotification(me, rolledMessage(numDice));
 
     TS.dice.putDiceInTray([{ name: clickedEl.innerHTML, roll: rollDesc }], null)
@@ -202,7 +224,7 @@ function parseActions(text) {
     // To include more dice complexity :
     // let results = text.matchAll(/(.*) ((?:\d{0,2}d\d{1,2}[+-]?\d*)+) ?(.*)/gi);
     // To follow our W&G weapon pattern :
-    let results = text.matchAll(/(.*);(melee|(?:(?:\d{1,2}) (?:\d{1,2}) (?:\d{1,2})));((?:\d{0,2}d\d{1,2}[+-]?\d*)+);(-|(?:[0-9]{1}));(-|(?:[0-9]{1}));?(.*)/gi);
+    let results = text.matchAll(/(.*);(melee|(?:(?:\d{1,2}) (?:\d{1,2}) (?:\d{1,2})));(\d{0,2}d\d{1,2}[+-]?\d*);(-|(?:[0-9]{1}));(-|(?:[0-9]{1}));?(.*)/gi);
     let actions = [];
     for (let result of results) {
         let action = {
@@ -219,6 +241,7 @@ function parseActions(text) {
 }
 
 function addCheckbox(boxNbre, parent) {
+    // Stop process if negative count
     if (boxNbre < 0) return;
 
     //remove old checkbox
@@ -231,9 +254,8 @@ function addCheckbox(boxNbre, parent) {
     let cell = selectedInput.parentElement;
     let container = cell.parentElement;
 
-    console.log("container " + container)
     for (let i = 0; i < boxNbre; i++) {
-        const newBox = document.createElement("input", { type: "checkbox", id: `${parent} + ${i}` });
+        const newBox = document.createElement("input");
         newBox.type = "checkbox";
         newBox.id = `checkbox-${parent}-${i}`
         newBox.checked = true
@@ -290,13 +312,12 @@ function addActions(results) {
             TS.dice.putDiceInTray([createDiceRoll(button, null)]).then((rollId) => {
                 // The dice roll has been initiated. Store the ID in our TrackedIds
                 if (debug) console.log("Roll initiated. Roll ID:", rollId);
-                trackedIds[rollId] = 1
+                trackedIds[rollId] = 2
             })
                 .catch((error) => {
                     // Something went wrong initiating the dice roll.
                     console.error("Error initiating roll:", error);
                 });
-            //we are not checking for success or failure here, but could easily by adding a .then (success) and .catch (failure)
         });
 
         container.insertBefore(clonedAction, document.getElementById("abilities-text").parentNode);
@@ -318,24 +339,20 @@ function loadStoredData() {
             keyCount++;
             let element = document.getElementById(key);
             element.value = value;
-            if (key == "thac0") {
-                element.dispatchEvent(new Event('change'));
-            } else if (element.type == "checkbox") {
+            if (element.type == "checkbox") {
                 element.checked = value == "on" ? true : false;
             } else if (key == "abilities-text") {
                 let results = parseActions(element.value);
                 addActions(results);
             } else if (key == "max-wounds") {
-                console.log("element value " + element.value)
                 addCheckbox(element.value, key)
             } else if (key == "max-shock") {
-                console.log("element value " + element.value)
                 addCheckbox(element.value, key)
             }
         }
         //adding some log information to the symbiote log
         //this doesn't have particular importance, but is here to show how it's done
-        TS.debug.log(`Loaded ${keyCount} values from storage`);
+        if (debug) TS.debug.log(`Loaded ${keyCount} values from storage`);
     });
 }
 
@@ -378,26 +395,6 @@ function onStateChangeEvent(msg) {
     }
 }
 
-
-function hideShow(select) {
-    const x = select;
-    if (x.style.display === "none") {
-        x.style.display = "flex";
-    } else {
-        x.style.display = "none";
-    }
-}
-
-function changeBody(registers, bodies, activeRegister) {
-    Array.from(registers.children).forEach((el, i) => {
-        if (bodies.children[i]) {
-            bodies.children[i].style.display = el == activeRegister ? 'block' : 'none'
-        }
-
-        el.setAttribute('aria-expanded', el == activeRegister ? 'true' : 'false')
-    })
-}
-
 // Gets the message together when we start a roll
 function rolledMessage(numDice, weapon) {
 
@@ -414,44 +411,7 @@ function rolledMessage(numDice, weapon) {
     return message;
 }
 
-
-// TaleSpire will call this after a die roll because of our manifest
-// Takes a look at the roll and handles it if it's one we made
-async function handleRollResult(rollEvent) {
-    if (trackedIds[rollEvent.payload.rollId] == undefined) {
-        // If we haven't tracked that roll, ignore it because it's not from us
-        return;
-    }
-
-    if (debug) console.log("roll event", rollEvent);
-
-    // Get the results groups from the roll event
-    const resultsGroups = rollEvent.payload.resultsGroups;
-
-    // Process each results group
-    for (let group of resultsGroups) {
-        // Get the roll results from the group
-        const results = group.result.results;
-
-        // Add the results to allResults
-        allResults = allResults.concat(results);
-    }
-
-    // After processing the roll event, remove its rollId from trackedIds
-    delete trackedIds[rollEvent.payload.rollId];
-
-    // Only update the HTML after all rolls are done
-    if (Object.values(trackedIds).every(value => value === 1)) {
-        const targetValue = 4
-
-        // Now update the results
-        updateResults(allResults, targetValue, true);
-        allResults = [];
-    }
-}
-
-
-function updateResults(results, targetValue, sendChatMessage) {
+function updateResults(results, damage, targetValue, sendChatMessage) {
 
     let processedResults = results;
 
@@ -469,7 +429,7 @@ function updateResults(results, targetValue, sendChatMessage) {
                 countIcon++;
             }
         } else {
-            // If result is a natural 1 or 6, update the corresponding counters
+            // If result is 4/5=success or 6=icon Exalted, update the corresponding counters
             if (result === 6) {
                 countExalted++;
             } else if (result >= targetValue && result !== 6) {
@@ -477,33 +437,90 @@ function updateResults(results, targetValue, sendChatMessage) {
             }
         }
     }
-
     if (sendChatMessage) {
-        TS.symbiote.sendNotification(me, resultsMessage());
+        TS.symbiote.sendNotification(me, resultsMessage(damage));
     }
-
 }
 
-// Makes the message for the Total Results table
-function resultsMessage() {
-    totalSuccesses = countIcon + 2 * countExalted
+// TaleSpire will call this after a die roll because of our manifest
+async function handleRollResult(rollEvent) {
+    if (trackedIds[rollEvent.payload.rollId] == undefined) {
+        // If we haven't tracked that roll, ignore it because it's not from us
+        return;
+    }
+
+    if (debug) console.log("roll event", rollEvent);
+    let results;
+    // Get the results groups from the roll event
+    const resultsGroups = rollEvent.payload.resultsGroups;
+    // Process each results group
+    for (let group of resultsGroups) {
+        // Get the roll results from the group
+        if (trackedIds[rollEvent.payload.rollId] == 2) {
+            results = group.result.operands[0].results;
+            damage = group.result.operands[1].value;
+        } else {
+            damage = 0;
+            results = group.result.results;
+        }
+
+        // Add the results to allResults
+        allResults = allResults.concat(results);
+    }
+
+    // After processing the roll event, remove its rollId from trackedIds
+    delete trackedIds[rollEvent.payload.rollId];
+
+    // Only update the HTML after all rolls are done
+    if (Object.values(trackedIds).every(value => value === 1)) {
+
+        // Now update the results
+        updateResults(allResults, damage, targetValue, true);
+        allResults = [];
+    }
+}
+
+// Makes the message for the Total Results
+function resultsMessage(damage) {
+    totalSuccesses = countIcon + 2 * countExalted + damage
     if (countCrit != 0) {
         crit = "yes";
         colorCrit = `<color="red">`;
-    } else crit = "no"
+    } else {
+        crit = "no"
+        colorCrit = `<color="white">`;
+    }
     if (countComplication != 0) {
         compl = "yes";
         colorCompl = `<color="red">`;
-    } else compl = "no"
+    } else {
+        compl = "no"
+        colorCompl = `<color="white">`;
+    }
+    let wrathText = `<size=120%><color="orange">Results<size=100%><color="white">
+<b>Icons :</b>  ${countIcon}
+<b>Exalted Icons :</b>  ${countExalted}
+<b>Total successes :</b> ${totalSuccesses}
+\n<color="orange"><b>WRATH DICE</b><color="white">
+<b>Complications :</b>${colorCompl}${compl}<color="white">
+<b>Critical Wrath :</b>${colorCrit}${crit}<color="white">`
 
-    return wrath.checked === true ? `<size=120%><color="orange">Results<size=100%><color="white">
-    <b>Icons :</b>  ${countIcon}
-    <b>Exalted Icons :</b>  ${countExalted}
-    <b>Total successes :</b> ${totalSuccesses}
-    \n<color="orange"><b>WRATH DICE</b><color="white">
-    <b>Complications :</b>${colorCompl}  ${compl}<color="white">
-    <b>Critical Wrath :</b>${colorCrit}  ${crit}<color="white">` : `<size=120%><color="orange">Results<size=100%><color="white">
+    let normalText = `<size=120%><color="orange">Results<size=100%><color="white">
 <b>Icons :</b>  ${countIcon}
 <b>Exalted Icons :</b>  ${countExalted}
 <b>Total successes :</b> ${totalSuccesses}`;
+
+    let damageText = `<size=120%><color="orange">Results<size=100%><color="white">
+<b>Icons :</b>  ${countIcon}
+<b>Exalted Icons :</b>  ${countExalted}
+<b>Damages :</b> ${totalSuccesses}`;
+    if (damage !== 0) {
+        damage = 0;
+        return damageText;
+    } else if (wrath.checked === true) {
+        return wrathText;
+    } else {
+        return normalText
+    }
 }
+

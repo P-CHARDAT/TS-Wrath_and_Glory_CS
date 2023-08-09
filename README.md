@@ -42,7 +42,7 @@ I'm a junior dev and i also did this project to work on some language that i don
 ### Inspirations
 
 Thanks to PanoramicPanda and his w40k diceRoller [a link](https://mod.io/g/talespire/m/warhammer-40k-dice-roller)
-It break the ground to help me deal with the log messages after rolling the dice.
+It helped me deal with the log messages after rolling the dice.
 I also took inspiration from the generic character sheet.
 
 Thanks for reading this ! Don't be to harsh, i did this in 3 days :P

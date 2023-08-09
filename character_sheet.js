@@ -20,6 +20,10 @@ let compl = "";
 let colorCrit = `<color="white">`
 let colorCompl = `<color="white">`
 
+// To facilitate the checkbox insertion
+function insertAfter(newNode, existingNode) {
+    existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
+}
 
 // Take the name of the player 
 async function findMe() {
@@ -101,6 +105,7 @@ function onInputChange(input) {
         //parse stored blob as json, but also handle if it's empty by
         //defaulting to an empty json document "{}" if stored data is false
         data = JSON.parse(storedData || "{}");
+        console.log("data " + JSON.stringify(data))
         if (input.type == "checkbox") {
             data[input.id] = input.checked ? "on" : "off";
         } else {
@@ -128,6 +133,14 @@ function onInputChange(input) {
 
     if (input.id == "wrath") {
         wrath = document.getElementById("wrath")
+    }
+
+    if (input.id == "max-wounds") {
+        addCheckbox(input.value, input.id)
+    }
+
+    if (input.id == "max-shock") {
+        addCheckbox(input.value, input.id)
     }
 }
 
@@ -180,6 +193,32 @@ function parseActions(text) {
         actions.push(action);
     }
     return actions;
+}
+
+function addCheckbox(boxNbre, parent) {
+    if (boxNbre < 0) return;
+
+    //remove old checkbox
+    let oldCheckbox = document.querySelectorAll(`[id^=checkbox-${parent}]`);
+    for (let oldBox of oldCheckbox) {
+        oldBox.remove();
+    }
+
+    let selectedInput = document.getElementById(parent);
+    let cell = selectedInput.parentElement;
+    let container = cell.parentElement;
+
+    console.log("container " + container)
+    for (let i = 0; i < boxNbre; i++) {
+        const newBox = document.createElement("input", { type: "checkbox", id: `${parent} + ${i}` });
+        newBox.type = "checkbox";
+        newBox.id = `checkbox-${parent}-${i}`
+        newBox.checked = true
+        newBox.addEventListener("change", function () {
+            onInputChange(newBox)
+        });
+        insertAfter(newBox, container);
+    }
 }
 
 function addActions(results) {
@@ -275,6 +314,12 @@ function loadStoredData() {
             } else if (key == "abilities-text") {
                 let results = parseActions(element.value);
                 addActions(results);
+            } else if (key == "max-wounds") {
+                console.log("element value " + element.value)
+                addCheckbox(element.value, key)
+            } else if (key == "max-shock") {
+                console.log("element value " + element.value)
+                addCheckbox(element.value, key)
             }
         }
         //adding some log information to the symbiote log

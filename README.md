@@ -1,40 +1,49 @@
 # 40k - Wrath & Glory - character sheet
 
-A sparkling new symbiote!
+## A brand new Symbiote to play Wrath & Glory !
+
+### How to use it ? 
+
+- Wrath dice :
+You can click on the wrath checkbox if you want to use a dice wrath. The first dice in the track is used as  the wrath dice.
+- The skills Traits and Attributes : 
+I've left the inputs for Attributes, Traits and Skills completely free to use. I don't know enough of Wrath&Glory to know how to use them correctly. The skill buttons use the total value to throw the right amount of d6.
+- The Arsenal :
+to create a new weapon you must follow this pattern : 
+##### <name>;<range>;<dice and modifier>;<armour penetration>;<salvo>;<description>
+- Name : gor for what you want, really
+- Range : it must be either "melee" or 3 numbers with a space between them ex : "12 24 36"
+- Dices : you must put in this order the number of d6 and the modifier right after ex : "4d6+6"
+- AP : put a value between 1-9 or put "-"
+- Salvo : same as AP
+- Description : you can do as you want here.
+Exemple : Chainsword;melee;4d6+9;-;-;Brutal, Parade
 
 
-To do : 
-- 1 voir comment stocker dans le cache mes inputs
-        -> DONE
-        -> Il faut un input textarea ou button -> doivent etre sur la page html initial
+### Context
 
+- Why this symbiote ?
+I'm currently learning this new rpg paper and I decided to test symbiote by developping a character sheet for this system.
 
-- 2 Refaire le systeme permettant de parse des action, dés et desc pour l'onglet arme
-text.matchAll(/(.*) (\d{0,2}d\d{1,2}[+-]?\d*) ?(.*)/gi);
-to be
-text.matchAll(/(.*) ((?:\d{0,2}d\d{1,2}[+-]?\d*)+) ?(.*)/gi);
-will allow for multiple damage dice combinations.
-    -> DONE
-    -> séparer les tables par ";". Dans range mettre melee ou les trois distances en valeur numérique et séparés par un espace. Pour AP et salvo mettre une valeur numérique entre 0-9 ou un "-"
-        -> ex : - "Rapier;melee;1d6+1d6;-;-;Brutal !"
-                - "Bolter;12 24 36;1d6+1d6;1;2;Brutal !"
+- Who am I ? 
+I'm a junior dev and i also did this project to work on some language that i don't usually use.
 
-- 3 cacher les notes pour rendre ça plus sympa
-        -> DONE
+### To do
 
-- 4 Reprendre le principe des armes en simplifié pour l'équipement, les capacités et les descriptions
-        -> Une autre fois
+- Maybe upgrade wargear, abilities and description tabs to have a similar behaviour as the weapon tab.
+        -> It means allow for  the possibility to inject new html attribute and hide the text-area.
 
-- 5 intégrer le parser de résultats des dés warhammer
-        -> Faire des boutons pour les compétences permettant de lancer un nombre de d6 équivalent à la valeur présente
+- Learn more of the game to be able to adresse other things like psychic powers ? I'll know when i'll play.
 
-        -> Faire un bouton -> lui donner une fonction onClick
-        -> Faire une fonction qui prend en param l'id de l'input qui a la valeur du roll
-                -> prendre cette valeur et ajouter d6
-                -> envoyer le roll à talespire
-        ->Récupérer le résultat de notre roll et l'interpréter
-                -> faire un array pour stocker les résultats voulus (icônes / icônes exaltées)
-        
-- 6 Faire du nettoyage et corrections (rename etc..)
+- Automatically fill the total of the each skills 
 
-- 7 Faire des box pour les wounds et shock en fontion de la valeur dans max input
+- Catch my errors to prevent bugs 
+
+### Inspirations
+
+Thanks to PanoramicPanda and his w40k diceRoller [a link](https://mod.io/g/talespire/m/warhammer-40k-dice-roller)
+It break the ground to help me deal with the log messages after rolling the dice.
+I also took inspiration from the generic character sheet.
+
+Thanks for reading this ! Don't be to harsh, i did this in 3 days :P
+Feel free to give some feedback. It's appreciated !

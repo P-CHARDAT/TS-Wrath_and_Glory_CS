@@ -191,13 +191,6 @@ p {
     border-radius: 0px 4px 4px 0px;
 }
 
-.thac0 {
-    flex: 1;
-    max-width: 2.5em;
-    font-size: 1.2em;
-    border: 1px solid var(--ts-color-secondary);
-    border-right: none;
-}
 
 button,
 input {
@@ -290,29 +283,6 @@ button.danger:hover {
 
 .hidden {
     display: none;
-}
-
-#thac0-matrix {
-    gap: 0%;
-}
-
-#thac0-matrix>.field-title {
-    background-color: var(--ts-background-secondary);
-    color: var(--ts-color-secondary);
-}
-
-#thac0-matrix>.field-data-short {
-    text-align: center;
-}
-
-#thac0-matrix>.first {
-    border-radius: 4px 0px 0px 4px;
-    border-left: 1px solid var(--ts-color-secondary);
-}
-
-#thac0-matrix>.last {
-    border-radius: 0px 4px 4px 0px;
-    border-right: 1px solid var(--ts-color-secondary);
 }
 
 /*scrollbar styling*/

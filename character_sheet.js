@@ -4,6 +4,8 @@ let me = '';
 const numDiceField = 4
 let trackedIds = {};
 let allResults = [];
+let wrath = document.getElementById("wrath");
+let debug = true;
 
 // Init counts
 let countIcon = 0;
@@ -15,7 +17,8 @@ let totalSuccesses = 0;
 // Other
 let crit = "";
 let compl = "";
-let color = `<color="white">`
+let colorCrit = `<color="white">`
+let colorCompl = `<color="white">`
 
 
 // Take the name of the player 
@@ -122,6 +125,10 @@ function onInputChange(input) {
         let actions = parseActions(input.value);
         addActions(actions);
     }
+
+    if (input.id == "wrath") {
+        wrath = document.getElementById("wrath")
+    }
 }
 
 function findFirstSiblingWithClass(element, className) {
@@ -220,7 +227,7 @@ function addActions(results) {
             TS.symbiote.sendNotification(me, rolledMessage(button.dataset.diceType, true));
             TS.dice.putDiceInTray([createDiceRoll(button, null)]).then((rollId) => {
                 // The dice roll has been initiated. Store the ID in our TrackedIds
-                if (true) console.log("Roll initiated. Roll ID:", rollId);
+                if (debug) console.log("Roll initiated. Roll ID:", rollId);
                 trackedIds[rollId] = 1
             })
                 .catch((error) => {
@@ -321,16 +328,14 @@ function roll(input) {
     countCrit = 0;
     countComplication = 0;
 
-    console.log("input here : " + input.value)
     const numDice = input.value;
     const rollDesc = numDice + 'd6';
-    console.log("rolldesc : " + rollDesc)
     TS.symbiote.sendNotification(me, rolledMessage(numDice));
 
     TS.dice.putDiceInTray([{ name: "myroll", roll: rollDesc }], null)
         .then((rollId) => {
             // The dice roll has been initiated. Store the ID in our TrackedIds
-            if (true) console.log("Roll initiated. Roll ID:", rollId);
+            if (debug) console.log("Roll initiated. Roll ID:", rollId);
             trackedIds[rollId] = 1
         })
         .catch((error) => {
@@ -386,7 +391,7 @@ async function handleRollResult(rollEvent) {
         return;
     }
 
-    if (true) console.log("roll event", rollEvent);
+    if (debug) console.log("roll event", rollEvent);
 
     // Get the results groups from the roll event
     const resultsGroups = rollEvent.payload.resultsGroups;
@@ -421,9 +426,8 @@ function updateResults(results, targetValue, sendChatMessage) {
     // Process each result
     for (let i = 0; i < processedResults.length; i++) {
         let result = results[i];
-        console.log("result of i : " + result)
         // If it's first dice = wrath dice, update the corresponding counters
-        if (i === 0) {
+        if (i === 0 && wrath.value === "on") {
             if (result === 6) {
                 countCrit++;
                 countExalted++;
@@ -453,19 +457,21 @@ function resultsMessage() {
     totalSuccesses = countIcon + 2 * countExalted
     if (countCrit != 0) {
         crit = "yes";
-        color = `<color="red">`;
+        colorCrit = `<color="red">`;
     } else crit = "no"
-    if(countComplication != 0){
+    if (countComplication != 0) {
         compl = "yes";
-        color = `<color="red">`;
+        colorCompl = `<color="red">`;
     } else compl = "no"
-    return `<size=120%><color="orange">Results<size=100%><color="white">
+
+    return wrath.checked === true ? `<size=120%><color="orange">Results<size=100%><color="white">
     <b>Icons :</b>  ${countIcon}
     <b>Exalted Icons :</b>  ${countExalted}
     <b>Total successes :</b> ${totalSuccesses}
     \n<color="orange"><b>WRATH DICE</b><color="white">
-    <b>Complications :</b>${color}  ${compl}<color="white">
-    <b>Critical Wrath :</b>${color}  ${crit}<color="white">
-`;
-
+    <b>Complications :</b>${colorCompl}  ${compl}<color="white">
+    <b>Critical Wrath :</b>${colorCrit}  ${crit}<color="white">` : `<size=120%><color="orange">Results<size=100%><color="white">
+<b>Icons :</b>  ${countIcon}
+<b>Exalted Icons :</b>  ${countExalted}
+<b>Total successes :</b> ${totalSuccesses}`;
 }

@@ -76,7 +76,7 @@ function initSheet() {
         }
     }
 
-    //   Pour rendre fonctionnel nos onglets weapons etc
+    //   Handle our tabs
     Array.from(document.querySelectorAll('.tabs')).forEach((tab_container, TabID) => {
         const registers = tab_container.querySelector('.tab-registers');
         const bodies = tab_container.querySelector('.tab-bodies');
@@ -97,8 +97,8 @@ function initSheet() {
 
 }
 
+//handles input changes to store them in local storage
 function onInputChange(input) {
-    //handles input changes to store them in local storage
     let data;
     // get already stored data
     TS.localStorage.campaign.getBlob().then((storedData) => {
@@ -173,12 +173,35 @@ function createDiceRoll(clickElement, inputElement) {
     return { name: label, roll: roll };
 }
 
+function roll(clickedEl, inputEl) {
+    countIcon = 0;
+    countExalted = 0;
+    countCrit = 0;
+    countComplication = 0;
+    console.log("HERE " + clickedEl.innerHTML)
+    const numDice = inputEl.value;
+    const rollDesc = numDice + 'd6';
+    TS.symbiote.sendNotification(me, rolledMessage(numDice));
+
+    TS.dice.putDiceInTray([{ name: clickedEl.innerHTML, roll: rollDesc }], null)
+        .then((rollId) => {
+            // The dice roll has been initiated. Store the ID in our TrackedIds
+            if (debug) console.log("Roll initiated. Roll ID:", rollId);
+            trackedIds[rollId] = 1
+        })
+        .catch((error) => {
+            // Something went wrong initiating the dice roll.
+            console.error("Error initiating roll:", error);
+        });
+}
+
 function parseActions(text) {
-    // Original
+    // Other parsing possibilities
+    // Original :
     // let results = text.matchAll(/(.*) (\d{0,2}d\d{1,2}[+-]?\d*) ?(.*)/gi);
-    // To include more dice complexity
+    // To include more dice complexity :
     // let results = text.matchAll(/(.*) ((?:\d{0,2}d\d{1,2}[+-]?\d*)+) ?(.*)/gi);
-    // To follow our W&G weapon pattern
+    // To follow our W&G weapon pattern :
     let results = text.matchAll(/(.*);(melee|(?:(?:\d{1,2}) (?:\d{1,2}) (?:\d{1,2})));((?:\d{0,2}d\d{1,2}[+-]?\d*)+);(-|(?:[0-9]{1}));(-|(?:[0-9]{1}));?(.*)/gi);
     let actions = [];
     for (let result of results) {
@@ -280,18 +303,6 @@ function addActions(results) {
     }
 }
 
-function populateTHAC0(event) {
-    let matrix = document.getElementById("thac0-matrix");
-    let children = matrix.children;
-    let remainingElements = 9;
-    for (let child of children) {
-        if (child.classList.contains("field-data-short")) {
-            child.textContent = event.target.value - remainingElements;
-            remainingElements--;
-        }
-    }
-}
-
 function loadStoredData() {
     TS.localStorage.campaign.getBlob().then((storedData) => {
         //localstorage blobs are just unstructured text.
@@ -367,28 +378,6 @@ function onStateChangeEvent(msg) {
     }
 }
 
-function roll(input) {
-    countIcon = 0;
-    countExalted = 0;
-    countCrit = 0;
-    countComplication = 0;
-
-    const numDice = input.value;
-    const rollDesc = numDice + 'd6';
-    TS.symbiote.sendNotification(me, rolledMessage(numDice));
-
-    TS.dice.putDiceInTray([{ name: "myroll", roll: rollDesc }], null)
-        .then((rollId) => {
-            // The dice roll has been initiated. Store the ID in our TrackedIds
-            if (debug) console.log("Roll initiated. Roll ID:", rollId);
-            trackedIds[rollId] = 1
-        })
-        .catch((error) => {
-            // Something went wrong initiating the dice roll.
-            console.error("Error initiating roll:", error);
-        });
-}
-
 
 function hideShow(select) {
     const x = select;
@@ -409,7 +398,7 @@ function changeBody(registers, bodies, activeRegister) {
     })
 }
 
-// Gets the message together when you start a roll
+// Gets the message together when we start a roll
 function rolledMessage(numDice, weapon) {
 
     if (me === '') findMe();
@@ -418,10 +407,8 @@ function rolledMessage(numDice, weapon) {
 
     if (weapon) {
         message += `<color="white"><size=100%><align="left">\n<color="white">I'm rolling <color="green">${numDice}<color="white">`;
-
     } else {
         message += `<color="white"><size=100%><align="left">\n<color="white">I'm rolling <color="green">${numDice}d6<color="white">`;
-
     }
 
     return message;

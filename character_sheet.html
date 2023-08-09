@@ -186,7 +186,6 @@
                         <td>
                             <label class="field-title" data-dice-type="1d6" data-modifier="no-mod"
                                 data-label="Max-Shock">MaxShock</label>
-                            <!-- <div id="shock"></div> -->
                         </td>
                         <td class="input-bg">
                             <input id="max-shock" type="number" class="field-data-short"></input>
@@ -286,8 +285,8 @@
                 <tbody>
                     <tr>
                         <td>
-                            <button class="cell-data" id="ath-roll" type="button"
-                                onclick="roll(athTotal)">Athletics</button>
+                            <button class="cell-data" id="athRoll" type="button"
+                                onclick="roll(athRoll,athTotal)">Athletics</button>
                         </td>
                         <td class="input-bg">
                             <input id="ath" type="number" class="field-data-short"></input>
@@ -301,8 +300,8 @@
                     </tr>
                     <tr>
                         <td>
-                            <button class="cell-data" id="awa-roll" type="button"
-                                onclick="roll(awaTotal)">Awareness</button>
+                            <button class="cell-data" id="awaRoll" type="button"
+                                onclick="roll(awaRoll,awaTotal)">Awareness</button>
                         </td>
                         <td class="input-bg">
                             <input id="awa" type="number" class="field-data-short"></input>
@@ -316,7 +315,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <button class="cell-data" id="bs-roll" type="button" onclick="roll(bsTotal)">Ballistic
+                            <button class="cell-data" id="bsRoll" type="button" onclick="roll(bsRoll,bsTotal)">Ballistic
                                 Skill</button>
                         </td>
                         <td class="input-bg">
@@ -331,8 +330,8 @@
                     </tr>
                     <tr>
                         <td>
-                            <button class="cell-data" id="cun-roll" type="button"
-                                onclick="roll(cunTotal)">Cunning</button>
+                            <button class="cell-data" id="cunRoll" type="button"
+                                onclick="roll(cunRoll,cunTotal)">Cunning</button>
                         </td>
                         <td class="input-bg">
                             <input id="cun" type="number" class="field-data-short"></input>
@@ -346,8 +345,8 @@
                     </tr>
                     <tr>
                         <td>
-                            <button class="cell-data" id="dec-roll" type="button"
-                                onclick="roll(decTotal)">Deception</button>
+                            <button class="cell-data" id="decRoll" type="button"
+                                onclick="roll(decRoll,decTotal)">Deception</button>
                         </td>
                         <td class="input-bg">
                             <input id="dec" type="number" class="field-data-short"></input>
@@ -361,8 +360,8 @@
                     </tr>
                     <tr>
                         <td>
-                            <button class="cell-data" id="ins-roll" type="button"
-                                onclick="roll(insTotal)">Insight</button>
+                            <button class="cell-data" id="insRoll" type="button"
+                                onclick="roll(insRoll,insTotal)">Insight</button>
                         </td>
                         <td class="input-bg">
                             <input id="ins" type="number" class="field-data-short"></input>
@@ -376,8 +375,8 @@
                     </tr>
                     <tr>
                         <td>
-                            <button class="cell-data" id="inti-roll" type="button"
-                                onclick="roll(intiTotal)">Intimidation</button>
+                            <button class="cell-data" id="intiRoll" type="button"
+                                onclick="roll(intiRoll,intiTotal)">Intimidation</button>
                         </td>
                         <td class="input-bg">
                             <input id="int" type="number" class="field-data-short"></input>
@@ -391,8 +390,8 @@
                     </tr>
                     <tr>
                         <td>
-                            <button class="cell-data" id="inv-roll" type="button"
-                                onclick="roll(invTotal)">Investigation</button>
+                            <button class="cell-data" id="invRoll" type="button"
+                                onclick="roll(invRoll,invTotal)">Investigation</button>
                         </td>
                         <td class="input-bg">
                             <input id="inv" type="number" class="field-data-short"></input>
@@ -406,8 +405,8 @@
                     </tr>
                     <tr>
                         <td>
-                            <button class="cell-data" id="lea-roll" type="button"
-                                onclick="roll(leaTotal)">Leadership</button>
+                            <button class="cell-data" id="leaRoll" type="button"
+                                onclick="roll(leaRoll,leaTotal)">Leadership</button>
                         </td>
                         <td class="input-bg">
                             <input id="lea" type="number" class="field-data-short"></input>
@@ -421,8 +420,8 @@
                     </tr>
                     <tr>
                         <td>
-                            <button class="cell-data" id="med-roll" type="button"
-                                onclick="roll(medTotal)">Medicae</button>
+                            <button class="cell-data" id="medRoll" type="button"
+                                onclick="roll(medRoll,medTotal)">Medicae</button>
                         </td>
                         <td class="input-bg">
                             <input id="med" type="number" class="field-data-short"></input>
@@ -436,8 +435,8 @@
                     </tr>
                     <tr>
                         <td>
-                            <button class="cell-data" id="per-roll" type="button"
-                                onclick="roll(perTotal)">Persuasion</button>
+                            <button class="cell-data" id="perRoll" type="button"
+                                onclick="roll(perRoll,perTotal)">Persuasion</button>
                         </td>
                         <td class="input-bg">
                             <input id="per" type="number" class="field-data-short"></input>
@@ -451,8 +450,8 @@
                     </tr>
                     <tr>
                         <td>
-                            <button class="cell-data" id="pil-roll" type="button"
-                                onclick="roll(pilTotal)">Pilot</button>
+                            <button class="cell-data" id="pilRoll" type="button"
+                                onclick="roll(pilRoll,pilTotal)">Pilot</button>
                         </td>
                         <td class="input-bg">
                             <input id="pil" type="number" class="field-data-short"></input>
@@ -466,7 +465,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <button class="cell-data" id="pm-roll" type="button" onclick="roll(pmTotal)">Psychic
+                            <button class="cell-data" id="pmRoll" type="button" onclick="roll(pmRoll,pmTotal)">Psychic
                                 Mastery</button>
                         </td>
                         <td class="input-bg">
@@ -481,8 +480,8 @@
                     </tr>
                     <tr>
                         <td>
-                            <button class="cell-data" id="sch-roll" type="button"
-                                onclick="roll(schTotal)">Scholar</button>
+                            <button class="cell-data" id="schRoll" type="button"
+                                onclick="roll(schRoll,schTotal)">Scholar</button>
                         </td>
                         <td class="input-bg">
                             <input id="sch" type="number" class="field-data-short"></input>
@@ -496,8 +495,8 @@
                     </tr>
                     <tr>
                         <td>
-                            <button class="cell-data" id="ste-roll" type="button"
-                                onclick="roll(steTotal)">Stealth</button>
+                            <button class="cell-data" id="steRoll" type="button"
+                                onclick="roll(steRoll,steTotal)">Stealth</button>
                         </td>
                         <td class="input-bg">
                             <input id="ste" type="number" class="field-data-short"></input>
@@ -511,8 +510,8 @@
                     </tr>
                     <tr>
                         <td>
-                            <button class="cell-data" id="sur-roll" type="button"
-                                onclick="roll(surTotal)">Survival</button>
+                            <button class="cell-data" id="surRoll" type="button"
+                                onclick="roll(surRoll,surTotal)">Survival</button>
                         </td>
                         <td class="input-bg">
                             <input id="sur" type="number" class="field-data-short"></input>
@@ -526,7 +525,8 @@
                     </tr>
                     <tr>
                         <td>
-                            <button class="cell-data" id="tec-roll" type="button" onclick="roll(tecTotal)">Tech</button>
+                            <button class="cell-data" id="tecRoll" type="button"
+                                onclick="roll(tecRoll,tecTotal)">Tech</button>
                         </td>
                         <td class="input-bg">
                             <input id="tec" type="number" class="field-data-short"></input>
@@ -540,7 +540,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <button class="cell-data" id="ws-roll" type="button" onclick="roll(wsTotal)">Weapon
+                            <button class="cell-data" id="wsRoll" type="button" onclick="roll(wsRoll,wsTotal)">Weapon
                                 Skill</button>
                         </td>
                         <td class="input-bg">
@@ -558,7 +558,7 @@
         </div>
     </div>
 
-
+    <!-- TABS -->
     <div class="tabs">
         <div class="tab-registers notes">
             <button id="weapon-tab" class="tab active-tab">Weapons</button>

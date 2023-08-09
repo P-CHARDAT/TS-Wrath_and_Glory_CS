@@ -3,7 +3,7 @@
   "name": "40k - Wrath & Glory - character sheet",
   "summary": "A character sheet to play W40k Wrath & Glory",
   "descriptionFilePath": "/README.md",
-  "version": "0.0.1",
+  "version": "1.0",
   "license": "MIT",
   "about": {
     "authors": ["Pierre CHARDAT"]

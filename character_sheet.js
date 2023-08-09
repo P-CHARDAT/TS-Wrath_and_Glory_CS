@@ -224,7 +224,7 @@ function parseActions(text) {
     // To include more dice complexity :
     // let results = text.matchAll(/(.*) ((?:\d{0,2}d\d{1,2}[+-]?\d*)+) ?(.*)/gi);
     // To follow our W&G weapon pattern :
-    let results = text.matchAll(/(.*);(melee|(?:(?:\d{1,2}) (?:\d{1,2}) (?:\d{1,2})));(\d{0,2}d\d{1,2}[+-]?\d*);(-|(?:[0-9]{1}));(-|(?:[0-9]{1}));?(.*)/gi);
+    let results = text.matchAll(/(.*);(melee|(?:(?:\d{1,2}) (?:\d{1,2}) (?:\d{1,2})));(\d{0,2}d\d{1,2}[+-]?\d*);(-|(?:[1-9]{1}));(-|(?:[1-9]{1}));?(.*)/gi);
     let actions = [];
     for (let result of results) {
         let action = {

@@ -10,7 +10,7 @@ You can click on the wrath checkbox if you want to use a dice wrath. The first d
 I've left the inputs for Attributes, Traits and Skills completely free to use. I don't know enough of Wrath&Glory to know how to use them correctly. The skill buttons use the total value to throw the right amount of d6.
 - The Arsenal :
 to create a new weapon you must follow this pattern : 
-##### <name>;<range>;<dice and modifier>;<armour penetration>;<salvo>;<description>
+##### "name";"range";"dice and modifier";"armour penetration";"salvo";"description"
 - Name : gor for what you want, really
 - Range : it must be either "melee" or 3 numbers with a space between them ex : "12 24 36"
 - Dices : you must put in this order the number of d6 and the modifier right after ex : "4d6+6"
